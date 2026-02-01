@@ -1,7 +1,7 @@
 /* -------------------------
    CONFIG
 -------------------------- */
-const HER_NAME = "Ananya"; // 🔴 CHANGE NAME HERE
+const HER_NAME = "Hitha"; // 🔴 CHANGE NAME HERE
 
 /* -------------------------
    ELEMENTS
@@ -171,3 +171,4 @@ function showToast(message) {
   setTimeout(() => (toast.style.opacity = "0"), 1400);
   setTimeout(() => toast.remove(), 1800);
 }
+
