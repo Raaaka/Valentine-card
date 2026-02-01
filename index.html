@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just One Question ❤️</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="Banja_tu_meri_rani_remix.m4a" type="audio/mp4">
+  </audio>
+
+  <!-- Screen 1 -->
+  <div class="screen" id="screen1">
+    <h1>Hey… 👀</h1>
+    <p>Once you proceed, there is no coming back.</p>
+
+    <button id="proceedBtn">Proceed</button>
+    <button id="noBtn1">No</button>
+  </div>
+
+  <!-- Screen 2 -->
+  <div class="screen hidden" id="screen2">
+    <h1>
+      Will you be my Valentine,
+      <span id="herName"></span>? 💖
+    </h1>
+
+    <div class="button-area">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn2">No</button>
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
