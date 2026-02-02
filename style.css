@@ -39,12 +39,11 @@ p {
   margin-bottom: 40px;
 }
 
-/* Buttons */
+/* Buttons base */
 button {
   padding: 12px 30px;
   font-size: 1.1rem;
   border: none;
-  border-radius: 30px;
   cursor: pointer;
   position: absolute;
   transition: all 0.3s ease;
@@ -54,6 +53,7 @@ button {
 #proceedBtn {
   background-color: #ff4d6d;
   color: white;
+  border-radius: 30px;
 }
 
 #noBtn1 {
@@ -62,6 +62,7 @@ button {
   font-size: 10px;
   bottom: 10px;
   right: 10px;
+  border-radius: 20px;
 }
 
 /* Screen 2 */
@@ -72,51 +73,56 @@ button {
   margin-top: 30px;
 }
 
-/* ❤️ Heart YES */
+/* ❤️ PERFECT HEART YES */
 #yesBtn {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   background: #ff4d6d;
   transform: rotate(-45deg);
-  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(255, 77, 109, 0.45);
 }
 
 #yesBtn::before,
 #yesBtn::after {
   content: "";
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   background: #ff4d6d;
   border-radius: 50%;
 }
 
 #yesBtn::before {
-  top: -60px;
+  top: -55px;
   left: 0;
 }
 
 #yesBtn::after {
-  left: 60px;
+  left: 55px;
   top: 0;
 }
 
+/* ✅ FIXED TEXT VISIBILITY */
 #yesBtn span {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 600;
-  z-index: 2;
+
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 /* NO button */
 #noBtn2 {
   background-color: #444;
   color: white;
+  border-radius: 30px;
 }
 
 /* Mobile */
@@ -138,5 +144,9 @@ button {
 
   #yesBtn::after {
     left: 45px;
+  }
+
+  #yesBtn span {
+    font-size: 1.3rem;
   }
 }
