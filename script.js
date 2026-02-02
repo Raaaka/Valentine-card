@@ -1,8 +1,8 @@
 /* =========================
    CONFIG
 ========================= */
-const HER_NAME = "Ananya"; // 🔴 CHANGE NAME HERE
-const DEBUG_STOP_NO = true; // 🛑 true = NO stops moving
+const HER_NAME = "Neelmani"; // 🔴 CHANGE NAME HERE
+const DEBUG_STOP_NO = false; // 🛑 true = NO stops moving
 
 /* =========================
    DEVICE CHECK
@@ -179,3 +179,4 @@ function showToast(msg) {
   setTimeout(() => (t.style.opacity = "0"), 1400);
   setTimeout(() => t.remove(), 1800);
 }
+
