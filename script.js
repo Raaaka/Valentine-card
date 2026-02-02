@@ -1,8 +1,23 @@
 /* =========================
+   NAME FROM URL
+========================= */
+
+// Default name if not provided
+const DEFAULT_NAME = "Beautiful";
+
+// Read ?name= from URL
+const urlParams = new URLSearchParams(window.location.search);
+const NAME_FROM_URL = urlParams.get("name");
+
+// Final name used everywhere
+const HER_NAME = NAME_FROM_URL
+  ? decodeURIComponent(NAME_FROM_URL)
+  : DEFAULT_NAME;
+
+/* =========================
    CONFIG
 ========================= */
-const HER_NAME = "Ananya"; // 🔴 CHANGE NAME HERE
-const DEBUG_STOP_NO = true; // 🛑 true = NO stops moving
+const DEBUG_STOP_NO = false; // 🛑 set true to stop NO movement (debug)
 
 /* =========================
    DEVICE CHECK
@@ -23,6 +38,7 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn2 = document.getElementById("noBtn2");
 const bgMusic = document.getElementById("bgMusic");
 
+// Inject name into DOM
 document.getElementById("herName").innerText = HER_NAME;
 
 /* =========================
@@ -32,7 +48,7 @@ function moveSlow(btn) {
   btn.style.left = Math.random() * 70 + "%";
   btn.style.top = Math.random() * 70 + "%";
 }
-setInterval(() => moveSlow(proceedBtn), 1500);
+setInterval(() => moveSlow(proceedBtn), 700);
 
 noBtn1.addEventListener("click", () => {
   showToast("Nice try 😏");
@@ -51,10 +67,10 @@ proceedBtn.addEventListener("click", () => {
 });
 
 /* =========================
-   NO BUTTON LOGIC
+   NO BUTTON LOGIC (SCREEN 2)
 ========================= */
 let noInterval = null;
-let noSpeed = 650;
+let noSpeed = 650; // 🎚️ control speed here
 let noClickCount = 0;
 
 const sarcasticReplies = [
@@ -77,7 +93,10 @@ function startNoMovement() {
 }
 
 function stopNoMovement() {
-  if (noInterval) clearInterval(noInterval);
+  if (noInterval) {
+    clearInterval(noInterval);
+    noInterval = null;
+  }
 }
 
 /* Desktop dodge */
@@ -97,7 +116,7 @@ if (isTouchDevice) {
   });
 }
 
-/* NO click = sarcasm */
+/* NO click = sarcastic reply */
 noBtn2.addEventListener("click", () => {
   noClickCount++;
 
@@ -105,7 +124,7 @@ noBtn2.addEventListener("click", () => {
     sarcasticReplies[noClickCount % sarcasticReplies.length]
   );
 
-  if (noClickCount >= 4) {
+  if (noClickCount >= 6) {
     showBrokenHeart();
   }
 });
@@ -135,11 +154,15 @@ yesBtn.addEventListener("click", () => {
   stopYesGrowth();
   stopNoMovement();
 
-  confetti({ particleCount: 220, spread: 100 });
+  confetti({
+    particleCount: 220,
+    spread: 100,
+    origin: { y: 0.6 }
+  });
 
   screen2.innerHTML = `
     <h1>YAYYYY!! ❤️🎉</h1>
-    <p>${HER_NAME}, you just made me the happiest person alive 🥰</p>
+    <p>${HER_NAME}, boyfriend privileges unlocked 🔓😎<br/>+ free Blinkit coupon 🛒😂</p>
   `;
 });
 
@@ -152,7 +175,7 @@ function showBrokenHeart() {
 
   screen2.innerHTML = `
     <h1 style="font-size:3rem;">💔</h1>
-    <p>${HER_NAME}… that hurt 😔</p>
+    <p>${HER_NAME}… that hurt My LOVE😔</p>
     <p style="opacity:0.7;">Refresh to try again 😉</p>
   `;
 }
