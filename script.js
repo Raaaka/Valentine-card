@@ -62,7 +62,7 @@ function moveFast(button) {
 function startNoMovement() {
   noMoveInterval = setInterval(() => {
     moveFast(noBtn2);
-  }, 10000000);
+  }, 100000000000);
 }
 
 function stopNoMovement() {
@@ -79,7 +79,7 @@ const funnyMessages = [
 ];
 
 let noClickCount = 0;
-const MAX_NO_CLICKS = 4; // 💔 after this → broken heart
+const MAX_NO_CLICKS = 6; // 💔 after this → broken heart
 
 /* Dodge on hover */
 noBtn2.addEventListener("mouseover", () => {
@@ -171,4 +171,5 @@ function showToast(message) {
   setTimeout(() => (toast.style.opacity = "0"), 1400);
   setTimeout(() => toast.remove(), 1800);
 }
+
 
