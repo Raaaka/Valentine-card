@@ -1,7 +1,14 @@
 /* -------------------------
    CONFIG
 -------------------------- */
-const HER_NAME = "Hitha"; // 🔴 CHANGE NAME HERE
+const HER_NAME = "Ananya"; // 🔴 CHANGE NAME HERE
+
+/* -------------------------
+   DEVICE CHECK
+-------------------------- */
+const isTouchDevice =
+  "ontouchstart" in window ||
+  navigator.maxTouchPoints > 0;
 
 /* -------------------------
    ELEMENTS
@@ -23,18 +30,15 @@ const bgMusic = document.getElementById("bgMusic");
 document.getElementById("herName").innerText = HER_NAME;
 
 /* -------------------------
-   Screen 1: Proceed hops slowly
+   Screen 1: Proceed hops
 -------------------------- */
-function moveSlow(button) {
-  button.style.left = Math.random() * 70 + "%";
-  button.style.top = Math.random() * 70 + "%";
+function moveSlow(btn) {
+  btn.style.left = Math.random() * 70 + "%";
+  btn.style.top = Math.random() * 70 + "%";
 }
 
-setInterval(() => {
-  moveSlow(proceedBtn);
-}, 1500);
+setInterval(() => moveSlow(proceedBtn), 1500);
 
-/* Screen 1: NO */
 noBtn1.addEventListener("click", () => {
   showToast("Nice try 😏");
 });
@@ -42,80 +46,73 @@ noBtn1.addEventListener("click", () => {
 /* -------------------------
    Proceed → Screen 2
 -------------------------- */
-let noMoveInterval = null;
-
 proceedBtn.addEventListener("click", () => {
   bgMusic.play();
   screen1.classList.add("hidden");
   screen2.classList.remove("hidden");
+
   startNoMovement();
+  startYesGrowth();
 });
 
 /* -------------------------
-   Screen 2: NO funny logic 🤡
+   NO button control
 -------------------------- */
-function moveFast(button) {
-  button.style.left = Math.random() * 80 + "%";
-  button.style.top = Math.random() * 80 + "%";
+let noSpeed = 650; // 🎚️ CONTROL SPEED HERE
+let noMoveInterval = null;
+
+function moveNoButton() {
+  noBtn2.style.left = Math.random() * 70 + "%";
+  noBtn2.style.top = Math.random() * 70 + "%";
 }
 
 function startNoMovement() {
-  noMoveInterval = setInterval(() => {
-    moveFast(noBtn2);
-  }, 100000000000);
+  stopNoMovement();
+  noMoveInterval = setInterval(moveNoButton, noSpeed);
 }
 
 function stopNoMovement() {
-  clearInterval(noMoveInterval);
+  if (noMoveInterval) clearInterval(noMoveInterval);
 }
 
-const funnyMessages = [
-  "Oops 😜",
-  "Missed me!",
-  "Too slow 😂",
-  "Almost 😏",
-  "Wrong button!",
-  "Try harder 😆"
-];
+/* Desktop hover dodge */
+if (!isTouchDevice) {
+  noBtn2.addEventListener("mouseenter", moveNoButton);
+}
 
-let noClickCount = 0;
-const MAX_NO_CLICKS = 6; // 💔 after this → broken heart
-
-/* Dodge on hover */
-noBtn2.addEventListener("mouseover", () => {
-  moveFast(noBtn2);
-});
-
-/* NO click */
-noBtn2.addEventListener("click", () => {
-  stopNoMovement();
-  noClickCount++;
-
-  if (noClickCount >= MAX_NO_CLICKS) {
-    showBrokenHeart();
-    return;
-  }
-
-  showToast(funnyMessages[noClickCount % funnyMessages.length]);
-
-  setTimeout(() => {
-    startNoMovement();
-  }, 400);
-});
+/* Mobile touch dodge (prevents click) */
+if (isTouchDevice) {
+  noBtn2.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveNoButton();
+  });
+}
 
 /* -------------------------
-   YES button grows 💕
+   YES auto grow ⏳
 -------------------------- */
-let scale = 1;
-yesBtn.addEventListener("mouseover", () => {
-  scale += 0.12;
-  yesBtn.style.transform = `scale(${scale})`;
-});
+let yesScale = 1;
+let yesGrowInterval = null;
+
+function startYesGrowth() {
+  stopYesGrowth();
+  yesGrowInterval = setInterval(() => {
+    if (yesScale < 1.8) {
+      yesScale += 0.02;
+      yesBtn.style.transform = `scale(${yesScale}) rotate(-45deg)`;
+    }
+  }, 300);
+}
+
+function stopYesGrowth() {
+  if (yesGrowInterval) clearInterval(yesGrowInterval);
+}
 
 /* -------------------------
-   YES click = CONFETTI + FINAL 🎉
+   YES click 🎉
 -------------------------- */
 yesBtn.addEventListener("click", () => {
+  stopYesGrowth();
   stopNoMovement();
 
   confetti({
@@ -126,50 +123,29 @@ yesBtn.addEventListener("click", () => {
 
   screen2.innerHTML = `
     <h1>YAYYYY!! ❤️🎉</h1>
-    <p>${HER_NAME}, you just unlocked boyfriend privileges 😌💖</p>
+    <p>${HER_NAME}, you just made me the happiest person alive 🥰</p>
   `;
 });
 
 /* -------------------------
-   BROKEN HEART END 💔
+   Toast
 -------------------------- */
-function showBrokenHeart() {
-  screen2.innerHTML = `
-    <h1 style="font-size: 3rem;">💔</h1>
-    <p style="font-size: 1.4rem;">
-      Ouch… my heart just broke 💔<br/>
-      ${HER_NAME}, that hurt 😔
-    </p>
-    <p style="opacity: 0.7; font-size: 1rem;">
-      (Refresh the page if you want to try again 😉)
-    </p>
-  `;
+function showToast(msg) {
+  const t = document.createElement("div");
+  t.innerText = msg;
+  t.style.position = "fixed";
+  t.style.bottom = "40px";
+  t.style.left = "50%";
+  t.style.transform = "translateX(-50%)";
+  t.style.background = "#000";
+  t.style.color = "#fff";
+  t.style.padding = "10px 18px";
+  t.style.borderRadius = "20px";
+  t.style.opacity = "0";
+  t.style.transition = "opacity 0.3s";
+  document.body.appendChild(t);
+
+  setTimeout(() => t.style.opacity = "1", 50);
+  setTimeout(() => t.style.opacity = "0", 1400);
+  setTimeout(() => t.remove(), 1800);
 }
-
-/* -------------------------
-   Toast message (floating text)
--------------------------- */
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.innerText = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "40px";
-  toast.style.left = "50%";
-  toast.style.transform = "translateX(-50%)";
-  toast.style.background = "#000";
-  toast.style.color = "#fff";
-  toast.style.padding = "10px 18px";
-  toast.style.borderRadius = "20px";
-  toast.style.fontSize = "14px";
-  toast.style.zIndex = "9999";
-  toast.style.opacity = "0";
-  toast.style.transition = "opacity 0.3s";
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => (toast.style.opacity = "1"), 50);
-  setTimeout(() => (toast.style.opacity = "0"), 1400);
-  setTimeout(() => toast.remove(), 1800);
-}
-
-
