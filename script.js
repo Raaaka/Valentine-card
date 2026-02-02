@@ -1,23 +1,30 @@
 /* =========================
-   NAME FROM URL
+   NAME + COUPON FROM URL
 ========================= */
 
-// Default name if not provided
+// Defaults
 const DEFAULT_NAME = "Beautiful";
+const DEFAULT_COUPON = null;
 
-// Read ?name= from URL
+// Read URL params
 const urlParams = new URLSearchParams(window.location.search);
-const NAME_FROM_URL = urlParams.get("name");
 
-// Final name used everywhere
+const NAME_FROM_URL = urlParams.get("name");
+const COUPON_FROM_URL = urlParams.get("coupon");
+
+// Final values
 const HER_NAME = NAME_FROM_URL
   ? decodeURIComponent(NAME_FROM_URL)
   : DEFAULT_NAME;
 
+const COUPON_TEXT = COUPON_FROM_URL
+  ? decodeURIComponent(COUPON_FROM_URL)
+  : DEFAULT_COUPON;
+
 /* =========================
    CONFIG
 ========================= */
-const DEBUG_STOP_NO = false; // 🛑 set true to stop NO movement (debug)
+const DEBUG_STOP_NO = false; // 🛑 true = stop NO movement (debug)
 
 /* =========================
    DEVICE CHECK
@@ -48,7 +55,7 @@ function moveSlow(btn) {
   btn.style.left = Math.random() * 70 + "%";
   btn.style.top = Math.random() * 70 + "%";
 }
-setInterval(() => moveSlow(proceedBtn), 700);
+setInterval(() => moveSlow(proceedBtn), 1500);
 
 noBtn1.addEventListener("click", () => {
   showToast("Nice try 😏");
@@ -70,7 +77,7 @@ proceedBtn.addEventListener("click", () => {
    NO BUTTON LOGIC (SCREEN 2)
 ========================= */
 let noInterval = null;
-let noSpeed = 650; // 🎚️ control speed here
+let noSpeed = 700; // 🎚️ control speed here
 let noClickCount = 0;
 
 const sarcasticReplies = [
@@ -149,7 +156,8 @@ function stopYesGrowth() {
   if (yesInterval) clearInterval(yesInterval);
 }
 
-/* YES CLICK */
+/* YES CLICK
+========================= */
 yesBtn.addEventListener("click", () => {
   stopYesGrowth();
   stopNoMovement();
@@ -162,7 +170,10 @@ yesBtn.addEventListener("click", () => {
 
   screen2.innerHTML = `
     <h1>YAYYYY!! ❤️🎉</h1>
-    <p>${HER_NAME}, boyfriend privileges unlocked 🔓😎<br/>+ free Blinkit coupon 🛒😂</p>
+    <p>
+      ${HER_NAME}, boyfriend privileges unlocked 😏❤️
+      ${COUPON_TEXT ? `<br/>🎁 Bonus perk: <strong>${COUPON_TEXT}</strong> 🛒😂` : ""}
+    </p>
   `;
 });
 
@@ -175,7 +186,7 @@ function showBrokenHeart() {
 
   screen2.innerHTML = `
     <h1 style="font-size:3rem;">💔</h1>
-    <p>${HER_NAME}… that hurt My LOVE😔</p>
+    <p>${HER_NAME}… that hurt 😔</p>
     <p style="opacity:0.7;">Refresh to try again 😉</p>
   `;
 }
