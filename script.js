@@ -1,30 +1,22 @@
 /* =========================
    NAME + COUPON FROM URL
 ========================= */
-
-// Defaults
 const DEFAULT_NAME = "Beautiful";
 const DEFAULT_COUPON = null;
 
-// Read URL params
-const urlParams = new URLSearchParams(window.location.search);
-
-const NAME_FROM_URL = urlParams.get("name");
-const COUPON_FROM_URL = urlParams.get("coupon");
-
-// Final values
-const HER_NAME = NAME_FROM_URL
-  ? decodeURIComponent(NAME_FROM_URL)
+const params = new URLSearchParams(window.location.search);
+const HER_NAME = params.get("name")
+  ? decodeURIComponent(params.get("name"))
   : DEFAULT_NAME;
 
-const COUPON_TEXT = COUPON_FROM_URL
-  ? decodeURIComponent(COUPON_FROM_URL)
+const COUPON_TEXT = params.get("coupon")
+  ? decodeURIComponent(params.get("coupon"))
   : DEFAULT_COUPON;
 
 /* =========================
    CONFIG
 ========================= */
-const DEBUG_STOP_NO = false; // 🛑 true = stop NO movement (debug)
+const DEBUG_STOP_NO = true;
 
 /* =========================
    DEVICE CHECK
@@ -38,28 +30,23 @@ const isTouchDevice =
 ========================= */
 const screen1 = document.getElementById("screen1");
 const screen2 = document.getElementById("screen2");
-
 const proceedBtn = document.getElementById("proceedBtn");
 const noBtn1 = document.getElementById("noBtn1");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn2 = document.getElementById("noBtn2");
 const bgMusic = document.getElementById("bgMusic");
 
-// Inject name into DOM
 document.getElementById("herName").innerText = HER_NAME;
 
 /* =========================
    SCREEN 1
 ========================= */
-function moveSlow(btn) {
-  btn.style.left = Math.random() * 70 + "%";
-  btn.style.top = Math.random() * 70 + "%";
-}
-setInterval(() => moveSlow(proceedBtn), 1500);
+setInterval(() => {
+  proceedBtn.style.left = Math.random() * 70 + "%";
+  proceedBtn.style.top = Math.random() * 70 + "%";
+}, 1500);
 
-noBtn1.addEventListener("click", () => {
-  showToast("Nice try 😏");
-});
+noBtn1.addEventListener("click", () => showToast("Nice try 😏"));
 
 /* =========================
    PROCEED → SCREEN 2
@@ -71,13 +58,14 @@ proceedBtn.addEventListener("click", () => {
 
   if (!DEBUG_STOP_NO) startNoMovement();
   startYesGrowth();
+  yesBtn.classList.add("heartbeat");
 });
 
 /* =========================
-   NO BUTTON LOGIC (SCREEN 2)
+   NO BUTTON (FIXED)
 ========================= */
 let noInterval = null;
-let noSpeed = 700; // 🎚️ control speed here
+let noSpeed = 650;
 let noClickCount = 0;
 
 const sarcasticReplies = [
@@ -100,10 +88,7 @@ function startNoMovement() {
 }
 
 function stopNoMovement() {
-  if (noInterval) {
-    clearInterval(noInterval);
-    noInterval = null;
-  }
+  if (noInterval) clearInterval(noInterval);
 }
 
 /* Desktop dodge */
@@ -111,30 +96,29 @@ if (!isTouchDevice) {
   noBtn2.addEventListener("mouseenter", () => {
     if (!DEBUG_STOP_NO) moveNo();
   });
+
+  noBtn2.addEventListener("click", handleNoAction);
 }
 
-/* Mobile dodge */
+/* Mobile: pointerup guarantees trigger */
 if (isTouchDevice) {
-  noBtn2.addEventListener("touchstart", (e) => {
-    if (!DEBUG_STOP_NO) {
-      e.preventDefault();
-      moveNo();
-    }
-  });
+  noBtn2.addEventListener("pointerup", handleNoAction);
 }
 
-/* NO click = sarcastic reply */
-noBtn2.addEventListener("click", () => {
+/* Unified NO handler */
+function handleNoAction() {
   noClickCount++;
 
-  showToast(
-    sarcasticReplies[noClickCount % sarcasticReplies.length]
-  );
+  if (navigator.vibrate) navigator.vibrate(120);
 
-  if (noClickCount >= 6) {
+  showToast(sarcasticReplies[noClickCount % sarcasticReplies.length]);
+
+  if (noClickCount >= 5) {
     showBrokenHeart();
+  } else if (!DEBUG_STOP_NO) {
+    setTimeout(moveNo, 120);
   }
-});
+}
 
 /* =========================
    YES AUTO GROW
@@ -156,17 +140,13 @@ function stopYesGrowth() {
   if (yesInterval) clearInterval(yesInterval);
 }
 
-/* YES CLICK
-========================= */
+/* YES CLICK */
 yesBtn.addEventListener("click", () => {
   stopYesGrowth();
   stopNoMovement();
+  yesBtn.classList.remove("heartbeat");
 
-  confetti({
-    particleCount: 220,
-    spread: 100,
-    origin: { y: 0.6 }
-  });
+  confetti({ particleCount: 220, spread: 100 });
 
   screen2.innerHTML = `
     <h1>YAYYYY!! ❤️🎉</h1>
@@ -183,6 +163,7 @@ yesBtn.addEventListener("click", () => {
 function showBrokenHeart() {
   stopYesGrowth();
   stopNoMovement();
+  yesBtn.classList.remove("heartbeat");
 
   screen2.innerHTML = `
     <h1 style="font-size:3rem;">💔</h1>
@@ -197,19 +178,22 @@ function showBrokenHeart() {
 function showToast(msg) {
   const t = document.createElement("div");
   t.innerText = msg;
-  t.style.position = "fixed";
-  t.style.bottom = "40px";
-  t.style.left = "50%";
-  t.style.transform = "translateX(-50%)";
-  t.style.background = "#000";
-  t.style.color = "#fff";
-  t.style.padding = "10px 18px";
-  t.style.borderRadius = "20px";
-  t.style.opacity = "0";
-  t.style.transition = "opacity 0.3s";
+  t.style.cssText = `
+    position:fixed;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#000;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:20px;
+    opacity:0;
+    transition:opacity .3s;
+    z-index:9999;
+  `;
   document.body.appendChild(t);
 
-  setTimeout(() => (t.style.opacity = "1"), 50);
-  setTimeout(() => (t.style.opacity = "0"), 1400);
+  setTimeout(() => t.style.opacity = "1", 50);
+  setTimeout(() => t.style.opacity = "0", 1400);
   setTimeout(() => t.remove(), 1800);
 }

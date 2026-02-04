@@ -12,7 +12,6 @@ body {
   justify-content: center;
 }
 
-/* Screens */
 .screen {
   position: relative;
   width: 100%;
@@ -25,21 +24,11 @@ body {
   justify-content: center;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
-h1 {
-  font-size: 2.2rem;
-  margin-bottom: 15px;
-}
+h1 { font-size: 2.2rem; }
+p { font-size: 1.2rem; margin-bottom: 40px; }
 
-p {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
-}
-
-/* Buttons base */
 button {
   padding: 12px 30px;
   font-size: 1.1rem;
@@ -73,14 +62,13 @@ button {
   margin-top: 30px;
 }
 
-/* ❤️ PERFECT HEART YES */
+/* ❤️ Heart YES */
 #yesBtn {
-  position: relative;
   width: 110px;
   height: 110px;
   background: #ff4d6d;
   transform: rotate(-45deg);
-  box-shadow: 0 10px 30px rgba(255, 77, 109, 0.45);
+  box-shadow: 0 10px 30px rgba(255,77,109,0.45);
 }
 
 #yesBtn::before,
@@ -93,29 +81,30 @@ button {
   border-radius: 50%;
 }
 
-#yesBtn::before {
-  top: -55px;
-  left: 0;
-}
+#yesBtn::before { top: -55px; left: 0; }
+#yesBtn::after  { left: 55px; top: 0; }
 
-#yesBtn::after {
-  left: 55px;
-  top: 0;
-}
-
-/* ✅ FIXED TEXT VISIBILITY */
 #yesBtn span {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
-
-  color: #ffffff;
+  color: #fff;
   font-size: 1.6rem;
   font-weight: 700;
   z-index: 10;
   pointer-events: none;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* 💓 Heartbeat */
+@keyframes heartbeat {
+  0%, 28%, 70% { transform: scale(1) rotate(-45deg); }
+  14%, 42% { transform: scale(1.12) rotate(-45deg); }
+}
+
+#yesBtn.heartbeat {
+  animation: heartbeat 1.4s infinite;
 }
 
 /* NO button */
@@ -125,11 +114,8 @@ button {
   border-radius: 30px;
 }
 
-/* Mobile */
 @media (max-width: 600px) {
-  h1 {
-    font-size: 1.7rem;
-  }
+  h1 { font-size: 1.7rem; }
 
   #yesBtn,
   #yesBtn::before,
@@ -138,15 +124,6 @@ button {
     height: 90px;
   }
 
-  #yesBtn::before {
-    top: -45px;
-  }
-
-  #yesBtn::after {
-    left: 45px;
-  }
-
-  #yesBtn span {
-    font-size: 1.3rem;
-  }
+  #yesBtn::before { top: -45px; }
+  #yesBtn::after  { left: 45px; }
 }
