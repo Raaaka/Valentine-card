@@ -65,7 +65,7 @@ proceedBtn.addEventListener("click", () => {
    NO BUTTON (FIXED)
 ========================= */
 let noInterval = null;
-let noSpeed = 300;
+let noSpeed = 100;
 let noClickCount = 0;
 
 const sarcasticReplies = [
