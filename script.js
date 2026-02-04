@@ -16,7 +16,7 @@ const COUPON_TEXT = params.get("coupon")
 /* =========================
    CONFIG
 ========================= */
-const DEBUG_STOP_NO = true;
+const DEBUG_STOP_NO = false;
 
 /* =========================
    DEVICE CHECK
